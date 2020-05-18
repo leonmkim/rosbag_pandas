@@ -65,7 +65,7 @@ def bag_to_dataframe(bag_name, include=None, exclude=None):
     data_dict = {}
     for idx, (topic, msg, t) in enumerate(bag.read_messages(topics=topics)):
         flattened_dict = _get_flattened_dictionary_from_ros_msg(msg)
-        for key, item in flattened_dict.iteritems():
+        for key, item in flattened_dict.items():
             data_key = topic + "/" + key
             if data_key not in data_dict:
                 if isinstance(item, float) or isinstance(item, int):
