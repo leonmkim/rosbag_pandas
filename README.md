@@ -11,8 +11,8 @@ import rosbag_pandas
 
 # Convert a ROSBag to a dataframe
 df = rosbag_pandas.bag_to_dataframe('data/rosout.bag')
-df_exclude = rosbag_pandas.bag_to_dataframe('data/example.bag', exclude=['/scan']))
-df_include = rosbag_pandas.bag_to_dataframe('data/rosout.bag', include=['/rosout']))
+df_exclude = rosbag_pandas.bag_to_dataframe('data/example.bag', exclude=['/scan'])
+df_include = rosbag_pandas.bag_to_dataframe('data/rosout.bag', include=['/rosout'])
 
 # Select a dataframe key based on topic and (conform msgevalgen pattern http://docs.ros.org/api/rostopic/html/)
 print(df['/rosout/header/stamp/secs'].to_string())
