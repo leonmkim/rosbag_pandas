@@ -2,8 +2,8 @@
 Changelog for package rosbag_pandas
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.4 (2020-08-25)
+------------------
 * chore: Noetic compatibility
 * chore: use dict.items() instead of iteritems()
   iteritems was [removed in python3](https://wiki.python.org/moin/Python3.0#Built-In_Changes).
