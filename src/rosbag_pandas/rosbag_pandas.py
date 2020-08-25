@@ -2,7 +2,7 @@
 
 import logging
 
-import flatdict
+from .flatdict import FlatterDict
 import numpy as np
 import pandas as pd
 import rosbag
@@ -88,7 +88,7 @@ def _get_flattened_dictionary_from_ros_msg(msg):
     :param msg: ROS msg instance
     :return: Flattened dict
     """
-    return flatdict.FlatterDict(convert_ros_message_to_dictionary(msg), delimiter="/")
+    return FlatterDict(convert_ros_message_to_dictionary(msg), delimiter="/")
 
 
 def _get_filtered_topics(topics, include, exclude):
