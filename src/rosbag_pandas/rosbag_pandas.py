@@ -64,6 +64,7 @@ def bag_to_dataframe(bag_name, include=None, exclude=None):
     index.fill(np.NAN)
     data_dict = {}
     for idx, (topic, msg, t) in enumerate(bag.read_messages(topics=topics)):
+        timestamp = msg.stamp.header
         flattened_dict = _get_flattened_dictionary_from_ros_msg(msg)
         for key, item in flattened_dict.items():
             data_key = topic + "/" + key
@@ -74,7 +75,7 @@ def bag_to_dataframe(bag_name, include=None, exclude=None):
                 else:
                     data_dict[data_key] = np.empty(df_length, dtype=np.object)
             data_dict[data_key][idx] = item
-        index[idx] = t.to_sec()
+        index[idx] = timestamp.to_sec() #t.to_sec()
 
     bag.close()
 
