@@ -29,7 +29,7 @@ def topics_from_keys(keys):
     return list(topics)
 
 
-def bag_to_dataframe(bag_name, include=None, exclude=None):
+def bagpath_to_dataframe(bag_name, include=None, exclude=None):
     """
     Read in a rosbag file and create a pandas data frame that
     is indexed by the time the message was recorded in the bag.
@@ -80,6 +80,56 @@ def bag_to_dataframe(bag_name, include=None, exclude=None):
         index[idx] = timestamp.to_sec() #t.to_sec()
 
     bag.close()
+
+    # now we have read all of the messages its time to assemble the dataframe
+    return pd.DataFrame(data=data_dict, index=index)
+
+def bag_to_dataframe(bag, include=None, exclude=None):
+    """
+    Read in a rosbag file and create a pandas data frame that
+    is indexed by the time the message was recorded in the bag.
+
+    :param bag_name: String name for the bag file
+    :param include: None, or List of Topics to include in the dataframe
+    :param exclude: None, or List of Topics to exclude in the dataframe (only applies if include is None)
+
+    :return: a pandas dataframe object
+    """
+    print('using leons custom rosbag_pandas!')
+
+    type_topic_info = bag.get_type_and_topic_info()
+    topics = type_topic_info.topics.keys()
+
+    # get list of topics to parse
+    logging.debug("Bag topics: %s", topics)
+
+    if not topics:
+        raise RosbagPandaException("No topics in bag")
+
+    topics = _get_filtered_topics(topics, include, exclude)
+    logging.debug("Filtered bag topics: %s", topics)
+
+    if not topics:
+        raise RosbagPandaException("No topics in bag after filtering")
+
+    df_length = sum([type_topic_info.topics[t].message_count for t in topics])
+
+    index = np.empty(df_length)
+    index.fill(np.NAN)
+    data_dict = {}
+    for idx, (topic, msg, t) in enumerate(bag.read_messages(topics=topics)):
+        timestamp = msg.header.stamp
+        flattened_dict = _get_flattened_dictionary_from_ros_msg(msg)
+        for key, item in flattened_dict.items():
+            data_key = topic + "/" + key
+            if data_key not in data_dict:
+                if isinstance(item, float) or isinstance(item, int):
+                    data_dict[data_key] = np.empty(df_length)
+                    data_dict[data_key].fill(np.NAN)
+                else:
+                    data_dict[data_key] = np.empty(df_length, dtype=np.object)
+            data_dict[data_key][idx] = item
+        index[idx] = timestamp.to_sec() #t.to_sec()
 
     # now we have read all of the messages its time to assemble the dataframe
     return pd.DataFrame(data=data_dict, index=index)
