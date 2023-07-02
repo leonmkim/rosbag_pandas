@@ -118,7 +118,11 @@ def bag_to_dataframe(bag, include=None, exclude=None):
     index.fill(np.NAN)
     data_dict = {}
     for idx, (topic, msg, t) in enumerate(bag.read_messages(topics=topics)):
-        timestamp = msg.header.stamp
+        # if msg has header use that timestamp, otherwise use bag timestamp
+        if hasattr(msg, 'header'):
+            timestamp = msg.header.stamp
+        else:
+            timestamp = t
         flattened_dict = _get_flattened_dictionary_from_ros_msg(msg)
         for key, item in flattened_dict.items():
             data_key = topic + "/" + key
