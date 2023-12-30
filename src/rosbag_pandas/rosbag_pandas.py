@@ -1,12 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import logging
+from rospy_message_converter.message_converter import convert_ros_message_to_dictionary
 
 from .flatdict import FlatterDict
 import numpy as np
 import pandas as pd
 import rosbag
-from rospy_message_converter.message_converter import convert_ros_message_to_dictionary
 
 
 class RosbagPandaException(Exception):
