@@ -75,7 +75,7 @@ def bagpath_to_dataframe(bag_name, include=None, exclude=None):
                     data_dict[data_key] = np.empty(df_length)
                     data_dict[data_key].fill(np.NAN)
                 else:
-                    data_dict[data_key] = np.empty(df_length, dtype=np.object)
+                    data_dict[data_key] = np.empty(df_length, dtype=object)
             data_dict[data_key][idx] = item
         index[idx] = timestamp.to_sec() #t.to_sec()
 
@@ -131,7 +131,7 @@ def bag_to_dataframe(bag, include=None, exclude=None):
                     data_dict[data_key] = np.empty(df_length)
                     data_dict[data_key].fill(np.NAN)
                 else:
-                    data_dict[data_key] = np.empty(df_length, dtype=np.object)
+                    data_dict[data_key] = np.empty(df_length, dtype=object)
             data_dict[data_key][idx] = item
         index[idx] = timestamp.to_sec() #t.to_sec()
 
