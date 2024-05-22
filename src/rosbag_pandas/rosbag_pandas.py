@@ -66,7 +66,7 @@ def bagpath_to_dataframe(bag_name, include=None, exclude=None):
     index.fill(np.NAN)
     data_dict = {}
     for idx, (topic, msg, t) in enumerate(bag.read_messages(topics=topics)):
-        timestamp = msg.header.stamp
+        timestamp = msg.header.stamp # Leon:using header timestamp instead of the received timestamp
         flattened_dict = _get_flattened_dictionary_from_ros_msg(msg)
         for key, item in flattened_dict.items():
             data_key = topic + "/" + key
