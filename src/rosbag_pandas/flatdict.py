@@ -3,6 +3,9 @@ key/value pair mapping of nested dictionaries.
 
 """
 import collections
+import sys
+if sys.version_info.major == 3 and sys.version_info.minor >= 10: # compatibility for python 3.10 and higher
+    setattr(collections, 'MutableMapping', collections.abc.MutableMapping) 
 
 __version__ = '3.1.0'
 
